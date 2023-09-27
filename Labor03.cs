@@ -19,28 +19,28 @@ namespace Program
                 .Count();
 
             var starkVictory = doc.Descendants("battle").Where(t => t.Element(t.Element("outcome").Value).Elements("house")
-            .Any(v => v.Value == "Stark")).Count();
+                .Any(v => v.Value == "Stark")).Count();
 
             var multipleHouseBattles = doc.Descendants("name").Where(t => t.Parent.Descendants("house")
-            .Count() > 2).Select(u => u.Value);
+                .Count() > 2).Select(u => u.Value);
 
             var threeCommonRegion = doc.Descendants("region").OrderByDescending(t => doc.Descendants("region")
-            .Count(u => u.Value == t.Value)).Select(v => v.Value).Distinct().Take(3);
+                .Count(u => u.Value == t.Value)).Select(v => v.Value).Distinct().Take(3);
 
             var mostCommonRegion = doc.Descendants("region").OrderByDescending(t => doc.Descendants("region")
-            .Count(u => u.Value == t.Value)).First().Value;
+                .Count(u => u.Value == t.Value)).First().Value;
 
             var multipleHouseBattlesInThreeCommonRegion = doc.Descendants("name").Where(t => t.Parent.Descendants("house").Count() > 2)
-            .Where(u => threeCommonRegion.Contains(u.Parent.Element("region").Value)).Select(w => w.Value);               
+                .Where(u => threeCommonRegion.Contains(u.Parent.Element("region").Value)).Select(w => w.Value);               
 
             var housesVictoryOrder = doc.Descendants("house").OrderByDescending(t => doc.Descendants("battle")
-            .Count( u => u.Element(u.Element("outcome").Value).Elements("house").Any(v => v.Value == t.Value)))
-            .Select(v => v.Value).Distinct();
+                .Count( u => u.Element(u.Element("outcome").Value).Elements("house").Any(v => v.Value == t.Value)))
+                .Select(v => v.Value).Distinct();
 
             var largestArmyBattle = doc.Descendants("name").OrderByDescending(t => t.Descendants("size").Max(u => u.Value)).First().Value;
 
             var mostAttackingCommanders = doc.Descendants("commander").OrderByDescending(t => doc.Descendants("attacker")
-            .Count(u => u.Value == t.Value)).Select(v => v.Value).Distinct().Take(3);
+                .Count(u => u.Value == t.Value)).Select(v => v.Value).Distinct().Take(3);
 
 
 
