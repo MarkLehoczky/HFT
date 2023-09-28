@@ -12,7 +12,7 @@ namespace Program
         {
             XDocument doc = XDocument.Load("http://users.nik.uni-obuda.hu/prog3/_data/war_of_westeros.xml");
 
-            var houseCount = doc.Descendants("house").Select(t => t.Value).Distinct().Count();
+            var houses = doc.Descendants("house").Select(t => t.Value).Distinct().Count();
 
             var ambushes = doc.Descendants("type").Where(t => t.Value == "ambush").Select(u => u.Parent.Element("name").Value);
 
@@ -46,7 +46,7 @@ namespace Program
 
 
 
-            houseCount.ConsoleWriteLine("1. {$} number of houses had battle");
+            houses.ConsoleWriteLine("1. {$} number of houses had battle");
 
             ambushes.ConsoleWriteLine("2. Ambushes:");
 
@@ -101,7 +101,7 @@ namespace Program
             Console.WriteLine(sb);
         }
 
-        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumberable)
+        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumerable)
         {
             StringBuilder sb = new();
 
@@ -116,7 +116,7 @@ namespace Program
             Console.WriteLine(sb);
         }
 
-        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumberable, string? value)
+        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumerable, string? value)
         {
             StringBuilder sb = new();
 
