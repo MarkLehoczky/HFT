@@ -1,6 +1,8 @@
 using System;
+using System.Text;
 using System.Linq;
 using System.Xml.Linq;
+using System.Collections.Generic;
 
 namespace Program
 {
@@ -31,10 +33,10 @@ namespace Program
                 .Count(u => u.Value == t.Value)).First().Value;
 
             var multipleHouseBattlesInThreeCommonRegion = doc.Descendants("name").Where(t => t.Parent.Descendants("house").Count() > 2)
-                .Where(u => threeCommonRegion.Contains(u.Parent.Element("region").Value)).Select(w => w.Value);               
+                .Where(u => threeCommonRegion.Contains(u.Parent.Element("region").Value)).Select(w => w.Value);
 
             var housesVictoryOrder = doc.Descendants("house").OrderByDescending(t => doc.Descendants("battle")
-                .Count( u => u.Element(u.Element("outcome").Value).Elements("house").Any(v => v.Value == t.Value)))
+                .Count(u => u.Element(u.Element("outcome").Value).Elements("house").Any(v => v.Value == t.Value)))
                 .Select(v => v.Value).Distinct();
 
             var largestArmyBattle = doc.Descendants("name").OrderByDescending(t => t.Descendants("size").Max(u => u.Value)).First().Value;
@@ -44,50 +46,94 @@ namespace Program
 
 
 
-            Console.WriteLine($"1. `{houseCount}` number of houses had battle");
-            Console.WriteLine();
+            houseCount.ConsoleWriteLine("1. {$} number of houses had battle");
 
-            Console.WriteLine("2. Ambushes:");
-            foreach (var item in ambushes)
-                Console.WriteLine($" > `{item}`");
-            Console.WriteLine();
+            ambushes.ConsoleWriteLine("2. Ambushes:");
 
-            Console.WriteLine($"3. There were `{defenderVictoryWithMajorPrisoner}` number of battle where the defenders won with a major prisoner");
-            Console.WriteLine();
+            defenderVictoryWithMajorPrisoner.ConsoleWriteLine("3. There were {$} number of battle where the defenders won with a major prisoner");
 
-            Console.WriteLine($"4. The Stark house won `{starkVictory}` number of battles");
-            Console.WriteLine();
+            starkVictory.ConsoleWriteLine("4. The Stark house won {$} number of battles");
 
-            Console.WriteLine("5. Battles with more than 2 houses:");
-            foreach (var item in multipleHouseBattles)
-                Console.WriteLine($" > `{item}`");
-            Console.WriteLine();
+            multipleHouseBattles.ConsoleWriteLine("5. Battles with more than 2 houses:");
 
-            Console.WriteLine("6. The three most common regions:");
-            foreach (var item in threeCommonRegion)
-                Console.WriteLine($" > `{item}`");
-            Console.WriteLine();
+            threeCommonRegion.ConsoleWriteLine("6. The three most common regions:");
 
-            Console.WriteLine($"7. The most common region is `{mostCommonRegion}`");
-            Console.WriteLine();
+            mostCommonRegion.ConsoleWriteLine("7. The most common region is {$}");
 
-            Console.WriteLine("8. Battles with more than 2 houses in the three most common region:");
-            foreach (var item in multipleHouseBattlesInThreeCommonRegion)
-                Console.WriteLine($" > `{item}`");
-            Console.WriteLine();
+            multipleHouseBattlesInThreeCommonRegion.ConsoleWriteLine("8. Battles with more than 2 houses in the three most common region:");
 
-            Console.WriteLine("9. Houses in order of number of victory:");
-            foreach (var item in housesVictoryOrder)
-                Console.WriteLine($" > `{item}`");
-            Console.WriteLine();
+            housesVictoryOrder.ConsoleWriteLine("9. Houses in order of number of victory:");
 
-            Console.WriteLine($"10. The `{largestArmyBattle}` battle had the largest army");
-            Console.WriteLine();
+            largestArmyBattle.ConsoleWriteLine("10. The {$} battle had the largest army");
 
-            Console.WriteLine("11. The three most attacking commanders:");
-            foreach (var item in mostAttackingCommanders)
-                Console.WriteLine($" > `{item}`");
-            Console.WriteLine();
+            mostAttackingCommanders.ConsoleWriteLine("11. The three most attacking commanders:");
+        }
+    }
+
+    static class Extension
+    {
+        public static void ConsoleWriteLine<T>(this T obj)
+        {
+            StringBuilder sb = new();
+            sb.AppendLine(obj.ToString());
+            sb.AppendLine();
+            Console.WriteLine(sb);
+        }
+
+        public static void ConsoleWriteLine<T>(this T obj, string? value)
+        {
+            StringBuilder sb = new();
+
+            if (value != null)
+            {
+                StringBuilder temp = new();
+                temp.Append('`');
+                temp.Append(obj.ToString());
+                temp.Append('`');
+                sb.AppendLine(value.Replace("{$}", temp.ToString()));
+            }
+            else
+            {
+                sb.AppendLine(obj.ToString());
+            }
+
+            sb.AppendLine();
+            Console.WriteLine(sb);
+        }
+
+        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumberable)
+        {
+            StringBuilder sb = new();
+
+            foreach (var item in enumberable)
+            {
+                sb.Append(" > `");
+                sb.Append(item);
+                sb.AppendLine("`");
+            }
+
+            sb.AppendLine();
+            Console.WriteLine(sb);
+        }
+
+        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumberable, string? value)
+        {
+            StringBuilder sb = new();
+
+            if (value != null)
+            {
+                sb.AppendLine(value);
+            }
+
+            foreach (var item in enumberable)
+            {
+                sb.Append(" > `");
+                sb.Append(item);
+                sb.AppendLine("`");
+            }
+
+            sb.AppendLine();
+            Console.WriteLine(sb);
         }
     }
 }
