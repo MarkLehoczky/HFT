@@ -105,7 +105,7 @@ namespace Program
         {
             StringBuilder sb = new();
 
-            foreach (var item in enumberable)
+            foreach (var item in enumerable)
             {
                 sb.Append(" > `");
                 sb.Append(item);
@@ -125,7 +125,7 @@ namespace Program
                 sb.AppendLine(value);
             }
 
-            foreach (var item in enumberable)
+            foreach (var item in enumerable)
             {
                 sb.Append(" > `");
                 sb.Append(item);
