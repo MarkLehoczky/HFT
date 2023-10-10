@@ -84,7 +84,7 @@ namespace Program
             
             Console.WriteLine("There are `{0}` number of fantasy books\n", fantasyCount);
             
-            Console.WriteLine("The most recent book's author is {0}\n", mostRecentBookAuthor);
+            Console.WriteLine("The most recent book's author is `{0}`\n", mostRecentBookAuthor);
             
             Console.WriteLine("The average price of the books is `{0: 0.##}`\n", averagePrice);
             
@@ -112,9 +112,58 @@ namespace Program
 
             var catalog = doc.Descendants("book").Select(t => Book.Parse(t));
 
-            Console.WriteLine();
-            Console.WriteLine();
-            catalog.ConsoleWriteLine("Catalog collection:");
+
+            var catalog_threeMostExpensiveName = catalog.OrderByDescending(t => t.price).Select(u => u.title).Take(3);
+
+            var catalog_fantasyCount = catalog.Select(t => t.genre).Where(u => u == "Fantasy").Count();
+
+            var catalog_mostRecentBookAuthor = catalog.OrderByDescending(t => t.publish_date).Select(u => u.author).First();
+
+            var catalog_averagePrice = catalog.Select(t => t.price).Average();
+
+            var catalog_isMikeGalosWriter = catalog.Select(t => t.author).Contains("Mike Galos");
+
+            var catalog_isMikeGalosWriterCorrectName = catalog.Select(t => t.author).Contains("Galos, Mike");
+
+            var catalog_cheapestBookName = catalog.OrderBy(t => t.price).First().title;
+
+            var catalog_allBookByRelease = catalog.OrderBy(t => t.publish_date).Select(u => u.title);
+
+            var catalog_alphabeticWriters = catalog.Select(t => t.author).OrderBy(t => t).Select(u => u);
+
+            var catalog_alphabeticWritersCorrectName = catalog.Select(t => t.author).OrderBy(t => t.Split(", ")[1] + " " + t.Split(", ")[0]).Select(u => u.Split(", ")[1] + " " + u.Split(", ")[0]);
+
+            var catalog_bookGenreStatistics = catalog.Select(t => t.genre).Select(t => t + " (#"
+                    + catalog.Select(u => u.genre).Count(u => u == t).ToString() + "): ~"
+                    + catalog.Where(u => u.genre == t).Average(v => v.price).ToString("0.##") + "$ price").Distinct();
+
+            var catalog_appearsMicrosoft = doc.Descendants("description").Select(t => t.Value).Any(u => u.Contains("Microsoft"));
+
+
+
+            catalog_threeMostExpensiveName.ConsoleWriteLine("Three most expesive books:");
+
+            Console.WriteLine("There are `{0}` number of fantasy books\n", catalog_fantasyCount);
+
+            Console.WriteLine("The most recent book's author is `{0}`\n", catalog_mostRecentBookAuthor);
+
+            Console.WriteLine("The average price of the books is `{0: 0.##}`\n", catalog_averagePrice);
+
+            Console.WriteLine("The catalog {0} at least one book from `Mike Galos`\n", catalog_isMikeGalosWriter ? "contains" : "does not contain");
+
+            Console.WriteLine("The catalog {0} at least one book from `Galos, Mike`\n", catalog_isMikeGalosWriterCorrectName ? "contains" : "does not contain");
+
+            Console.WriteLine("The `{0}` book is the cheapest\n", catalog_cheapestBookName);
+
+            catalog_allBookByRelease.ConsoleWriteLine("All books in order of release:");
+
+            catalog_alphabeticWriters.ConsoleWriteLine("Authors in alphabetical order:");
+
+            catalog_alphabeticWritersCorrectName.ConsoleWriteLine("Authors in alphabetical order:");
+
+            catalog_bookGenreStatistics.ConsoleWriteLine("Statistics of book genres:");
+
+            Console.WriteLine("The word `Microsoft` {0} in at least one of the descriptions\n", catalog_appearsMicrosoft ? "appeares" : "does not appear");
 
 
             #endregion
