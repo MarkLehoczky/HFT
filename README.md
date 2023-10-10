@@ -18,3 +18,5 @@
 
 ***
 [3. labor (XML, LINQ) feladatmegoldás](Labor03.cs)
+
+[1. extra feladat (XML, Json, LINQ) feladatmegoldás](Extra01.cs)
