@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
@@ -106,6 +106,68 @@ namespace Program
 
 
             #endregion
+
+            #region Catalog Collection actions
+
+
+            var catalog = doc.Descendants("book").Select(t => Book.Parse(t));
+
+            Console.WriteLine();
+            Console.WriteLine();
+            catalog.ConsoleWriteLine("Catalog collection:");
+
+
+            #endregion
+        }
+    }
+
+    class Book
+    {
+        public string id { get; set; }
+        public string author { get; set; }
+        public string title { get; set; }
+        public string genre { get; set; }
+        public double price { get; set; }
+        public DateTime publish_date { get; set; }
+        public string description { get; set; }
+
+        public Book() { }
+
+        public Book(string id, string author, string title, string genre, double price, DateTime publish_date, string description)
+        {
+            this.id = id;
+            this.author = author;
+            this.title = title;
+            this.genre = genre;
+            this.price = price;
+            this.publish_date = publish_date;
+            this.description = description;
+        }
+
+        public static Book Parse(XElement element)
+        {
+            string? id = element.Attribute("id")?.Value;
+            string? author = element.Element("author")?.Value;
+            string? title = element.Element("title")?.Value;
+            string? genre = element.Element("genre")?.Value;
+            double price;
+            DateTime publish_date;
+            string? description = element.Element("description")?.Value;
+
+            if (id == null
+                || author == null
+                || genre == null
+                || !double.TryParse(element.Element("price").Value, out price)
+                || !DateTime.TryParse(element.Element("publish_date").Value, out publish_date)
+                || description == null)
+                throw new NotSupportedException();
+
+            return new Book(id, author, title, genre, price, publish_date, description);
+        }
+
+        public override string ToString()
+        {
+            return $"{author}: {title}(#{id} - {publish_date.ToShortDateString()})[{genre}] - {description.Replace("\n", " ")}";
         }
     }
 
