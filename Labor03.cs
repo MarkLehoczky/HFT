@@ -1,14 +1,12 @@
 using System;
-using System.Text;
 using System.Linq;
 using System.Xml.Linq;
-using System.Collections.Generic;
 
 namespace Program
 {
-    class Program
+    class Labor03
     {
-        public static void Main()
+        public static void Run()
         {
             XDocument doc = XDocument.Load("http://users.nik.uni-obuda.hu/prog3/_data/war_of_westeros.xml");
 
@@ -67,73 +65,6 @@ namespace Program
             largestArmyBattle.ConsoleWriteLine("10. The {$} battle had the largest army");
 
             mostAttackingCommanders.ConsoleWriteLine("11. The three most attacking commanders:");
-        }
-    }
-
-    static class Extension
-    {
-        public static void ConsoleWriteLine<T>(this T obj)
-        {
-            StringBuilder sb = new();
-            sb.AppendLine(obj.ToString());
-            sb.AppendLine();
-            Console.WriteLine(sb);
-        }
-
-        public static void ConsoleWriteLine<T>(this T obj, string? value)
-        {
-            StringBuilder sb = new();
-
-            if (value != null)
-            {
-                StringBuilder temp = new();
-                temp.Append('`');
-                temp.Append(obj.ToString());
-                temp.Append('`');
-                sb.AppendLine(value.Replace("{$}", temp.ToString()));
-            }
-            else
-            {
-                sb.AppendLine(obj.ToString());
-            }
-
-            sb.AppendLine();
-            Console.WriteLine(sb);
-        }
-
-        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumerable)
-        {
-            StringBuilder sb = new();
-
-            foreach (var item in enumerable)
-            {
-                sb.Append(" > `");
-                sb.Append(item);
-                sb.AppendLine("`");
-            }
-
-            sb.AppendLine();
-            Console.WriteLine(sb);
-        }
-
-        public static void ConsoleWriteLine<T>(this IEnumerable<T> enumerable, string? value)
-        {
-            StringBuilder sb = new();
-
-            if (value != null)
-            {
-                sb.AppendLine(value);
-            }
-
-            foreach (var item in enumerable)
-            {
-                sb.Append(" > `");
-                sb.Append(item);
-                sb.AppendLine("`");
-            }
-
-            sb.AppendLine();
-            Console.WriteLine(sb);
         }
     }
 }
